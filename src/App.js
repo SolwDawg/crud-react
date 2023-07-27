@@ -1,4 +1,4 @@
-import classNames from 'classnames/bind'
+import classNames from 'classnames/bind';
 import { Container } from 'react-bootstrap';
 
 import styles from './App.scss';

@@ -1,12 +1,22 @@
 import Table from 'react-bootstrap/Table';
 import { useEffect, useState } from 'react';
-import { fetchAllUser } from '../services/userService';
 import ReactPaginate from 'react-paginate';
+import classNames from 'classnames/bind';
+import { ToastContainer } from 'react-toastify';
+
+
+import { fetchAllUser } from '../services/userService';
+import styles from '../App.scss';
+import ModalAddNew from './ModalAddNew';
+
+
+const cx = classNames.bind(styles)
 
 function TableUsers() {
 
     const [listUsers, setListUsers] = useState([]);
-    const [totalPages, setTotalPages] = useState(0);    
+    const [totalPages, setTotalPages] = useState(0);
+    const [isShowModal, setIsShowModal] = useState(false);
 
     useEffect(() => {
         getUsers(1);
@@ -24,8 +34,16 @@ function TableUsers() {
         }
     }
 
+    const handleUpdateTable = (users) => {
+        setListUsers([users, ...listUsers])
+    }
+
     return (
         <>
+            <div className={cx('my-3 add-new')}>
+                <h4>List user:</h4>
+                <button className='btn btn-success' onClick={() => setIsShowModal(true)}>Add user</button>
+            </div>
             <Table responsive striped bordered hover>
                 <thead>
                     <tr>
@@ -69,6 +87,23 @@ function TableUsers() {
                 containerClassName="pagination"
                 activeClassName="active"
                 renderOnZeroPageCount={null}
+            />
+            <ModalAddNew
+                show={isShowModal}
+                handleClose={() => setIsShowModal(false)}
+                handleUpdateTable={handleUpdateTable}
+            />
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
             />
         </>
     )
